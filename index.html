@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Ale OS | Personal Portfolio</title>
+  <title>Alejandro OS | Tech guy</title>
   <style>
     :root{
       --text:#fff;
@@ -343,6 +343,29 @@
       .icon{width:27px;height:27px}
       footer{padding-top:8px}
     }
+
+    /* Alejandro's dark, minimal look. The light version is a user-selectable alternative. */
+    #wall{background:radial-gradient(ellipse 70% 60% at 78% 93%,rgba(78,66,141,.45),transparent 70%),radial-gradient(ellipse 55% 50% at 10% 20%,rgba(22,61,103,.32),transparent 70%),linear-gradient(150deg,#06080e,#111725 60%,#1d1b2d)}
+    .ic-about{background:linear-gradient(145deg,#41465c,#181d2b)}
+    .ic-projects{background:linear-gradient(145deg,#292e3e,#0c101a)}
+    .ic-skills{background:linear-gradient(145deg,#385d73,#172637)}
+    .ic-notes{background:linear-gradient(145deg,#dbdce7,#828898);color:#1b2230}
+    .ic-photos{background:linear-gradient(145deg,#8d83ab,#3f405c);color:#fff}
+    .ic-contact{background:linear-gradient(145deg,#277e76,#143d45)}
+    .ic-safari{background:linear-gradient(145deg,#3b659c,#172e57)}
+    .ic-settings{background:linear-gradient(145deg,#5c606c,#262934)}
+    .intro h1 span{color:#a8b7f2!important}
+    body.light-mode{background:#e9edf6}
+    body.light-mode #wall{background:radial-gradient(ellipse 80% 60% at 80% 100%,rgba(139,166,228,.65),transparent 70%),radial-gradient(ellipse 60% 60% at 10% 10%,rgba(203,197,242,.7),transparent 70%),linear-gradient(145deg,#dce8f8,#f5f5fa)}
+    body.light-mode #desktop,body.light-mode #lock{color:#253049}
+    body.light-mode .app,body.light-mode .unlock{color:#253049}
+    body.light-mode .glass{background:rgba(255,255,255,.55);border-color:rgba(255,255,255,.75)}
+    body.light-mode .appicon{color:white}
+    body.light-mode .ic-notes{color:#253049}
+    body.light-mode .intro h1 span{color:#6173b8!important}
+    body.light-mode #lock .unlock-chip{color:#253049}
+    body.light-mode footer{color:#253049}
+    @media(max-width:360px){.apps{gap:13px 4px}.appicon{width:57px;height:57px}.app{font-size:10px}.clock-wrap{font-size:11px}.intro h1{font-size:40px}}
   </style>
 </head>
 <body>
@@ -362,7 +385,7 @@
   <section id="lock" onclick="unlock()">
     <div class="lock-date" id="lockdate"></div>
     <div class="lock-time" id="locktime"></div>
-    <div class="lock-sub">Welcome to my little corner of the internet.</div>
+    <div class="lock-sub">Alejandro’s personal space on the internet.</div>
     <div class="unlock-wrap">
       <div class="unlock-chip glass"><span class="chevron">⌃</span> Swipe up or tap to unlock</div>
       <button class="unlock" onclick="unlock()">Open Ale OS</button>
@@ -371,15 +394,15 @@
 
   <section id="desktop">
     <header>
-      <div class="logo-wrap glass"><span class="logo">ale<span style="opacity:.55">.os</span></span></div>
+      <div class="logo-wrap glass"><span class="logo">alejandro<span style="opacity:.55">.os</span></span></div>
       <div class="clock-wrap glass" id="topclock"></div>
     </header>
 
     <main>
       <div class="intro">
         <div class="eyebrow">Personal space / portfolio</div>
-        <h1>hey, i'm ale<span style="color:#f6b3cf">.</span></h1>
-        <p>Computing student at UTech, Jamaica 🇯🇲 exploring technology, building things, and learning along the way.</p>
+        <h1>hey, i'm alejandro<span style="color:#f6b3cf">.</span></h1>
+        <p>Tech guy · Computing student at UTech, Jamaica 🇯🇲</p>
       </div>
 
       <div class="apps">
@@ -418,7 +441,7 @@
       </div>
     </main>
 
-    <footer>Made in Jamaica, with curiosity and a little creativity. © <span id="year"></span> Ale</footer>
+    <footer>Made in Jamaica · © <span id="year"></span> Alejandro</footer>
   </section>
 
   <section id="window" class="window" onclick="if(event.target===this)closeApp()">
@@ -461,14 +484,14 @@
     $('lock').addEventListener('touchend', e => { if(startY - e.changedTouches[0].clientY > 35) unlock(); }, {passive:true});
 
     const contents = {
-      about:`<div class="label">Hello there</div><h2>I'm Ale 👋</h2><p>I'm a computing student at the University of Technology, Jamaica. This space is my digital home, where I can share what I'm learning, what I'm building, and what catches my interest.</p><div class="tile"><b>📍 Based in Jamaica</b><p>Studying computing at UTech, Jamaica.</p></div><h3>A little about me</h3><p>I'm interested in technology and growing my skills through classes, experiments, and personal projects. More of my story coming soon.</p>`,
-      projects:`<div class="label">My work</div><h2>Projects</h2><p>A place for things I've built, class assignments I'm proud of, and projects in progress.</p><div class="tile"><b>🚀 Project 01</b><p>Your first featured project goes here. Add its title, screenshots, description, and GitHub link.</p></div><div class="tile"><b>💡 Project 02</b><p>Another project to show off what you've learned.</p></div><p class="muted">Demo placeholders. Replace with your real projects.</p>`,
-      skills:`<div class="label">The toolkit</div><h2>Skills & interests</h2><p>Currently studying computing and exploring different areas of technology.</p><h3>Areas to showcase</h3><span class="pill">Programming</span><span class="pill">Web development</span><span class="pill">Problem solving</span><span class="pill">Databases</span><span class="pill">Software design</span><p class="muted">These are suggested portfolio categories, not a verified list of your skills. Edit them as needed.</p>`,
-      notes:`<div class="label">The notebook</div><h2>Leave a note ✍️</h2><p>Have a thought about this site? Write it here. This local demo saves notes only in your browser.</p><textarea id="note" placeholder="Hey Ale, your site looks cool..."></textarea><button class="small-button" onclick="saveNote()">Save note</button><h3>Saved notes</h3><div id="noteslist"></div>`,
-      photos:`<div class="label">The gallery</div><h2>Photos</h2><div class="mock-photo"><svg class="icon"><use href="#i-photo"></use></svg></div><p>Moments, places, and little pieces of life in Jamaica.</p><p class="muted">Add your own photos here to make the gallery yours.</p>`,
-      contact:`<div class="label">Get in touch</div><h2>Say hello.</h2><p>Want to connect about tech, projects, or something interesting? Here's where to find me.</p><div class="tile"><b>📧 Email</b><p>Add your email address to activate a contact link.</p></div><div class="tile"><b>⌘ GitHub</b><p>Add your GitHub profile.</p></div><div class="tile"><b>↗ LinkedIn</b><p>Add your LinkedIn profile.</p></div>`,
-      safari:`<div class="label">My corner of the web</div><h2>Safari 🌐</h2><p>A curated corner for my favourite links, profiles, and resources.</p><div class="tile"><b>University of Technology, Jamaica</b><p>My university.</p><a class="contactlink" href="https://www.utech.edu.jm/" target="_blank" rel="noopener">Visit UTech</a></div>`,
-      settings:`<div class="label">Personalize the space</div><h2>Settings</h2><p>Change the look of this little desktop.</p><h3>Wallpaper</h3><div class="button-row"><button class="small-button" onclick="theme(0)">Berry</button><button class="small-button" onclick="theme(1)">Ocean</button><button class="small-button" onclick="theme(2)">Midnight</button></div><h3>Lock screen</h3><button class="small-button" onclick="closeApp();lockScreen()">Lock screen</button>`
+      about:`<div class="label">Hello there</div><h2>I'm Alejandro.</h2><p>Tech guy and computing student at the University of Technology, Jamaica.</p><div class="tile"><b>About me</b><p>More about Alejandro is coming soon.</p></div><div class="tile"><b>Interests</b><p>To be added.</p></div><p class="muted">This section is a placeholder until I add my personal story and interests.</p>`,
+      projects:`<div class="label">My work</div><h2>Projects</h2><p>I'll be sharing projects here soon.</p><div class="tile"><b>Projects coming soon</b><p>Descriptions, screenshots and links will be added when they're ready.</p></div><a class="contactlink" href="https://github.com/realalejandrodaley" target="_blank" rel="noopener noreferrer">Visit my GitHub</a>`,
+      skills:`<div class="label">The toolkit</div><h2>Skills</h2><p>My technologies, tools and interests will appear here.</p><div class="tile"><b>Skills coming soon</b><p>I'll add the technologies I use and what I'm currently learning.</p></div>`,
+      notes:`<div class="label">The notebook</div><h2>Notes</h2><p>Write a personal note here. Notes are saved only in this browser, not sent to Alejandro.</p><textarea id="note" placeholder="Write something..."></textarea><button class="small-button" onclick="saveNote()">Save note locally</button><h3>Saved notes</h3><div id="noteslist"></div>`,
+      photos:`<div class="label">The gallery</div><h2>Photos</h2><div class="mock-photo"><svg class="icon"><use href="#i-photo"></use></svg></div><p>Personal photos coming soon.</p><p class="muted">Gallery placeholder. No personal photos have been uploaded yet.</p>`,
+      contact:`<div class="label">Get in touch</div><h2>Say hello.</h2><p>Have a question, want to collaborate, or just want to connect? Find me here.</p><div class="tile"><b>Email</b><p>alejandrodaley@outlook.com</p><a class="contactlink" href="mailto:alejandrodaley@outlook.com">Send an email</a></div><div class="tile"><b>Instagram</b><p>@realalejandrodaley</p><a class="contactlink" href="https://instagram.com/realalejandrodaley" target="_blank" rel="noopener noreferrer">Open Instagram</a></div><div class="tile"><b>GitHub</b><p>@realalejandrodaley</p><a class="contactlink" href="https://github.com/realalejandrodaley" target="_blank" rel="noopener noreferrer">Open GitHub</a></div>`,
+      safari:`<div class="label">My corner of the web</div><h2>Links</h2><p>Find me around the internet.</p><div class="tile"><b>GitHub</b><a class="contactlink" href="https://github.com/realalejandrodaley" target="_blank" rel="noopener noreferrer">My GitHub</a></div><div class="tile"><b>Instagram</b><a class="contactlink" href="https://instagram.com/realalejandrodaley" target="_blank" rel="noopener noreferrer">My Instagram</a></div><div class="tile"><b>University of Technology, Jamaica</b><a class="contactlink" href="https://www.utech.edu.jm/" target="_blank" rel="noopener noreferrer">UTech website</a></div>`,
+      settings:`<div class="label">Make it yours</div><h2>Appearance</h2><p>Switch between dark and light mode. Your choice is saved on this device.</p><div class="button-row"><button class="small-button" onclick="setTheme('dark')">Dark mode</button><button class="small-button" onclick="setTheme('light')">Light mode</button></div><h3>Lock screen</h3><button class="small-button" onclick="closeApp();lockScreen()">Lock screen</button>`
     };
 
     const titles = {about:'About Me',projects:'Projects',skills:'Skills',notes:'Notes',photos:'Photos',contact:'Contact',safari:'Safari',settings:'Settings'};
@@ -516,9 +539,11 @@
       setTimeout(() => $('toast').style.display = 'none', 2200);
     }
 
-    function theme(i){
-      $('wall').style.filter = ['none','hue-rotate(85deg)','hue-rotate(175deg) brightness(.55)'][i];
+    function setTheme(mode){
+      document.body.classList.toggle('light-mode',mode==='light');
+      try { localStorage.setItem('ale-theme',mode); } catch(e) {}
     }
+    try { setTheme(localStorage.getItem('ale-theme')==='light'?'light':'dark'); } catch(e) { setTheme('dark'); }
 
     function lockScreen(){
       $('lock').style.display = 'flex';
