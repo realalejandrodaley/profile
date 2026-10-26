@@ -1,0 +1,532 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Ale OS | Personal Portfolio</title>
+  <style>
+    :root{
+      --text:#fff;
+      --text-dark:#20212a;
+      --muted:#6f7382;
+      --glass:rgba(255,255,255,.14);
+      --glass-border:rgba(255,255,255,.16);
+      --safe-top:max(16px, env(safe-area-inset-top));
+      --safe-bottom:max(16px, env(safe-area-inset-bottom));
+      font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Inter,Roboto,sans-serif;
+      color:var(--text);
+      font-synthesis:none;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      min-height:100dvh;
+      background:#0b1022;
+      overflow:hidden;
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
+    }
+    button,a,input,textarea{font:inherit}
+    button{cursor:pointer}
+
+    #wall{
+      position:fixed;
+      inset:0;
+      background:
+        radial-gradient(ellipse 80% 65% at 70% 100%,#e385ad 0%,transparent 60%),
+        radial-gradient(ellipse 60% 58% at 25% 78%,#6c4bac 0%,transparent 66%),
+        radial-gradient(ellipse 65% 65% at 72% 12%,#172b6f 0%,transparent 65%),
+        linear-gradient(145deg,#06152f,#30245a 55%,#b04d83);
+      z-index:-2;
+      transition:filter .35s ease;
+    }
+    #wall::after{
+      content:'';
+      position:absolute;
+      inset:0;
+      background:linear-gradient(180deg,transparent 58%,rgba(16,12,44,.45));
+      pointer-events:none;
+    }
+
+    .glass{
+      background:var(--glass);
+      backdrop-filter:blur(24px);
+      -webkit-backdrop-filter:blur(24px);
+      border:1px solid var(--glass-border);
+      box-shadow:0 18px 60px rgba(0,0,0,.22);
+    }
+
+    /* Lock screen */
+    #lock{
+      position:fixed;
+      inset:0;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:flex-start;
+      padding:var(--safe-top) 24px var(--safe-bottom);
+      z-index:5;
+      transition:opacity .55s,transform .55s;
+      text-align:center;
+      user-select:none;
+    }
+    .lock-date{font-size:clamp(16px,2.8vw,22px);font-weight:500;margin-top:12vh}
+    .lock-time{
+      font-size:clamp(68px,18vw,132px);
+      font-weight:650;
+      letter-spacing:-.09em;
+      line-height:1.03;
+      margin-left:-.08em;
+      margin-top:8px;
+    }
+    .lock-sub{font-size:14px;margin-top:10px;opacity:.8;max-width:30ch;line-height:1.4}
+    .unlock-wrap{margin-top:auto;display:flex;flex-direction:column;align-items:center;gap:10px}
+    .unlock-chip{
+      padding:12px 18px;
+      border-radius:999px;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      font-size:14px;
+      line-height:1;
+    }
+    .unlock{
+      border:0;
+      background:none;
+      color:#fff;
+      font-size:14px;
+      opacity:.88;
+      animation:pulse 2s infinite;
+    }
+    .chevron{display:inline-block;font-size:18px;transform:translateY(-1px)}
+    @keyframes pulse{50%{opacity:.48}}
+
+    /* Desktop */
+    #desktop{
+      display:none;
+      min-height:100dvh;
+      padding:var(--safe-top) 24px var(--safe-bottom);
+      flex-direction:column;
+      overflow:auto;
+      overscroll-behavior:contain;
+    }
+    header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      font-size:13px;
+      font-weight:600;
+      margin-bottom:20px;
+    }
+    .logo-wrap,.clock-wrap{
+      padding:10px 14px;
+      border-radius:14px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      min-height:42px;
+    }
+    .logo{font-size:20px;letter-spacing:-.05em}
+    .clock-wrap{opacity:.95}
+
+    main{
+      width:min(100%,1000px);
+      margin:auto;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-direction:column;
+      gap:34px;
+      padding:20px 0 6px;
+      flex:1;
+    }
+    .intro{text-align:center;max-width:680px}
+    .eyebrow{font-size:12px;letter-spacing:.2em;text-transform:uppercase;opacity:.72}
+    .intro h1{font-size:clamp(46px,10vw,104px);letter-spacing:-.075em;line-height:.98;margin:12px 0 14px}
+    .intro p{opacity:.88;line-height:1.6;margin:0;font-size:clamp(14px,2vw,18px)}
+
+    .apps{
+      width:100%;
+      display:grid;
+      grid-template-columns:repeat(4,minmax(92px,1fr));
+      gap:24px 18px;
+      justify-items:center;
+    }
+    .app{
+      background:none;
+      border:0;
+      color:white;
+      display:flex;
+      align-items:center;
+      flex-direction:column;
+      gap:10px;
+      font-size:13px;
+      width:100%;
+      max-width:118px;
+      text-align:center;
+    }
+    .appicon{
+      height:78px;
+      width:78px;
+      border-radius:22px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow:0 16px 28px rgba(0,0,0,.2);
+      border:1px solid rgba(255,255,255,.26);
+      transition:transform .2s ease, box-shadow .2s ease;
+    }
+    .app:hover .appicon,.app:focus-visible .appicon{transform:translateY(-4px) scale(1.04);box-shadow:0 18px 34px rgba(0,0,0,.25)}
+    .app span.label-text{display:block;line-height:1.28}
+    .icon{width:34px;height:34px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+    .ic-about{background:linear-gradient(140deg,#ffc9b0,#d26c83)}
+    .ic-projects{background:linear-gradient(145deg,#2c324a,#0e1320)}
+    .ic-skills{background:linear-gradient(140deg,#8ed4ff,#4d78ef)}
+    .ic-notes{background:linear-gradient(180deg,#fff4b3 0 24%,#ffffff 24%);color:#353535}
+    .ic-photos{background:linear-gradient(145deg,#ffffff,#d8dfee);color:#d75f93}
+    .ic-contact{background:linear-gradient(145deg,#6de6b6,#159884)}
+    .ic-safari{background:linear-gradient(145deg,#7fd2ff,#196fe5)}
+    .ic-settings{background:linear-gradient(145deg,#aab0bd,#505468)}
+
+    footer{text-align:center;font-size:12px;opacity:.78;padding-top:18px}
+
+    /* Window */
+    .window{
+      display:none;
+      position:fixed;
+      inset:0;
+      z-index:20;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      background:rgba(6,8,17,.46);
+      backdrop-filter:blur(8px);
+      -webkit-backdrop-filter:blur(8px);
+    }
+    .panel{
+      width:min(100%,680px);
+      height:min(720px,88dvh);
+      border-radius:24px;
+      overflow:hidden;
+      background:#f8f8fb;
+      color:var(--text-dark);
+      box-shadow:0 35px 100px rgba(0,0,0,.48);
+      display:flex;
+      flex-direction:column;
+    }
+    .bar{
+      height:54px;
+      padding:0 16px;
+      display:flex;
+      align-items:center;
+      gap:9px;
+      border-bottom:1px solid #e5e5ea;
+      background:#fff;
+      flex:none;
+    }
+    .dot{height:12px;width:12px;border-radius:50%;border:0;padding:0}
+    .red{background:#ff5d59}.yellow{background:#ffbe2e}.green{background:#29c941}
+    .bar strong{margin:auto;font-size:13px;color:#555}
+    .bar .spacer{width:54px}
+    .content{overflow:auto;padding:30px;flex:1}
+    .content h2{font-size:clamp(30px,4vw,38px);letter-spacing:-.045em;margin:0 0 15px}
+    .content h3{font-size:17px;margin:22px 0 8px}
+    .content p{color:#5d6070;line-height:1.7}
+    .pill{display:inline-block;background:#eceaf8;padding:9px 12px;border-radius:999px;color:#554d84;font-size:13px;margin:5px 5px 5px 0}
+    .tile{border:1px solid #e5e5ea;background:white;border-radius:17px;padding:18px;margin:12px 0}
+    .tile b{display:block;margin-bottom:8px}
+    .tile p{margin:0;font-size:14px}
+    .muted{color:#888 !important;font-size:13px}
+    .contactlink{display:block;background:#201a3a;color:white;text-decoration:none;border-radius:12px;padding:14px 18px;text-align:center;margin-top:15px}
+    .mock-photo{height:190px;background:linear-gradient(135deg,#322869,#9f4e99,#ffc5a7);border-radius:18px;display:flex;align-items:center;justify-content:center;color:#fff}
+    .mock-photo .icon{width:52px;height:52px}
+    textarea{
+      display:block;
+      width:100%;
+      min-height:180px;
+      border:1px solid #ddd;
+      border-radius:14px;
+      padding:14px;
+      font:inherit;
+      resize:vertical;
+      background:#fff;
+    }
+    input{width:100%;padding:13px;border:1px solid #ddd;border-radius:10px}
+    .small-button{
+      background:#3e3374;
+      color:white;
+      border:0;
+      border-radius:12px;
+      padding:11px 16px;
+      margin-top:10px;
+    }
+    .button-row{display:flex;flex-wrap:wrap;gap:10px}
+    .label{font-size:11px;letter-spacing:.11em;text-transform:uppercase;color:#9287a7;font-weight:700}
+    #toast{
+      position:fixed;
+      bottom:calc(var(--safe-bottom) + 8px);
+      left:50%;
+      transform:translateX(-50%);
+      padding:12px 18px;
+      border-radius:15px;
+      background:#17152b;
+      color:#fff;
+      z-index:35;
+      display:none;
+      max-width:min(90vw,380px);
+      text-align:center;
+    }
+
+    /* Tablet */
+    @media (max-width: 820px){
+      #desktop{padding-left:18px;padding-right:18px}
+      main{align-items:stretch;gap:28px;padding-top:8px}
+      .intro{max-width:none}
+      .apps{grid-template-columns:repeat(4,minmax(74px,1fr));gap:18px 10px}
+      .app{max-width:none}
+      .appicon{width:72px;height:72px;border-radius:20px}
+      .icon{width:31px;height:31px}
+      .content{padding:24px}
+    }
+
+    /* Mobile */
+    @media (max-width: 640px){
+      body{overflow:hidden}
+      .lock-date{margin-top:10vh}
+      .lock-time{font-size:clamp(62px,23vw,92px)}
+      #desktop{padding-left:14px;padding-right:14px}
+      header{position:sticky;top:0;z-index:4;padding-bottom:6px}
+      .logo-wrap,.clock-wrap{padding:9px 12px;border-radius:13px}
+      main{justify-content:flex-start;padding-top:10px;padding-bottom:24px;gap:24px}
+      .intro h1{font-size:clamp(42px,14vw,64px)}
+      .intro p br{display:none}
+      .apps{
+        grid-template-columns:repeat(4,minmax(0,1fr));
+        gap:16px 8px;
+      }
+      .app{font-size:11px;gap:8px}
+      .appicon{height:64px;width:64px;border-radius:18px}
+      .icon{width:28px;height:28px}
+      footer{padding-top:10px;padding-bottom:6px}
+
+      .window{padding:0;align-items:flex-end}
+      .panel{
+        width:100%;
+        height:min(92dvh,760px);
+        border-radius:24px 24px 0 0;
+      }
+      .bar{height:58px;padding-top:6px}
+      .bar::before{
+        content:'';
+        position:absolute;
+        left:50%;
+        transform:translateX(-50%);
+        top:10px;
+        width:44px;
+        height:5px;
+        border-radius:999px;
+        background:#d9d9df;
+      }
+      .bar{position:relative}
+      .content{padding:22px 18px 26px}
+      .tile{padding:16px}
+      textarea{min-height:150px}
+    }
+
+    @media (max-height: 680px){
+      .intro h1{font-size:clamp(40px,8vw,58px)}
+      main{gap:18px}
+      .apps{gap:14px 10px}
+      .appicon{width:62px;height:62px}
+      .icon{width:27px;height:27px}
+      footer{padding-top:8px}
+    }
+  </style>
+</head>
+<body>
+  <svg aria-hidden="true" width="0" height="0" style="position:absolute;overflow:hidden">
+    <symbol id="i-user" viewBox="0 0 24 24"><path d="M20 21a8 8 0 0 0-16 0"></path><circle cx="12" cy="8" r="4"></circle></symbol>
+    <symbol id="i-code" viewBox="0 0 24 24"><path d="m8 16-4-4 4-4"></path><path d="m16 8 4 4-4 4"></path><path d="m14 4-4 16"></path></symbol>
+    <symbol id="i-cpu" viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="10" rx="2"></rect><path d="M10 1v3M14 1v3M10 20v3M14 20v3M20 10h3M20 14h3M1 10h3M1 14h3M4 4l2 2M18 18l2 2M20 4l-2 2M6 18l-2 2"></path></symbol>
+    <symbol id="i-note" viewBox="0 0 24 24"><path d="M8 2h8l4 4v16H8a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Z"></path><path d="M16 2v4h4"></path><path d="M10 11h6M10 15h6"></path></symbol>
+    <symbol id="i-photo" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"></rect><circle cx="9" cy="10" r="2"></circle><path d="m21 16-5-5-6 6-2-2-5 5"></path></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="m4 7 8 6 8-6"></path></symbol>
+    <symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="m15.5 8.5-2.7 6.2-6.3 2.8 2.8-6.3 6.2-2.7Z"></path></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1.1V21a2 2 0 0 1-4 0v-.1a1.7 1.7 0 0 0-.4-1.1 1.7 1.7 0 0 0-1-.6 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-.6-1 1.7 1.7 0 0 0-1.1-.4H2.8a2 2 0 0 1 0-4h.1a1.7 1.7 0 0 0 1.1-.4 1.7 1.7 0 0 0 .6-1 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.6c.38-.17.7-.48.88-.88A1.7 1.7 0 0 0 10 2.7V2.6a2 2 0 1 1 4 0v.1c0 .4.15.8.42 1.1.2.18.45.32.7.4a1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06c-.52.51-.66 1.29-.34 1.87.08.25.22.5.4.7.3.27.7.42 1.1.42h.1a2 2 0 0 1 0 4h-.1c-.4 0-.8.15-1.1.42-.18.2-.32.45-.4.7Z"></path></symbol>
+  </svg>
+
+  <div id="wall"></div>
+
+  <section id="lock" onclick="unlock()">
+    <div class="lock-date" id="lockdate"></div>
+    <div class="lock-time" id="locktime"></div>
+    <div class="lock-sub">Welcome to my little corner of the internet.</div>
+    <div class="unlock-wrap">
+      <div class="unlock-chip glass"><span class="chevron">⌃</span> Swipe up or tap to unlock</div>
+      <button class="unlock" onclick="unlock()">Open Ale OS</button>
+    </div>
+  </section>
+
+  <section id="desktop">
+    <header>
+      <div class="logo-wrap glass"><span class="logo">ale<span style="opacity:.55">.os</span></span></div>
+      <div class="clock-wrap glass" id="topclock"></div>
+    </header>
+
+    <main>
+      <div class="intro">
+        <div class="eyebrow">Personal space / portfolio</div>
+        <h1>hey, i'm ale<span style="color:#f6b3cf">.</span></h1>
+        <p>Computing student at UTech, Jamaica 🇯🇲 exploring technology, building things, and learning along the way.</p>
+      </div>
+
+      <div class="apps">
+        <button class="app" onclick="openApp('about')">
+          <span class="appicon ic-about"><svg class="icon"><use href="#i-user"></use></svg></span>
+          <span class="label-text">About Me</span>
+        </button>
+        <button class="app" onclick="openApp('projects')">
+          <span class="appicon ic-projects"><svg class="icon"><use href="#i-code"></use></svg></span>
+          <span class="label-text">Projects</span>
+        </button>
+        <button class="app" onclick="openApp('skills')">
+          <span class="appicon ic-skills"><svg class="icon"><use href="#i-cpu"></use></svg></span>
+          <span class="label-text">Skills</span>
+        </button>
+        <button class="app" onclick="openApp('notes')">
+          <span class="appicon ic-notes"><svg class="icon"><use href="#i-note"></use></svg></span>
+          <span class="label-text">Notes</span>
+        </button>
+        <button class="app" onclick="openApp('photos')">
+          <span class="appicon ic-photos"><svg class="icon"><use href="#i-photo"></use></svg></span>
+          <span class="label-text">Photos</span>
+        </button>
+        <button class="app" onclick="openApp('contact')">
+          <span class="appicon ic-contact"><svg class="icon"><use href="#i-mail"></use></svg></span>
+          <span class="label-text">Contact</span>
+        </button>
+        <button class="app" onclick="openApp('safari')">
+          <span class="appicon ic-safari"><svg class="icon"><use href="#i-compass"></use></svg></span>
+          <span class="label-text">Safari</span>
+        </button>
+        <button class="app" onclick="openApp('settings')">
+          <span class="appicon ic-settings"><svg class="icon"><use href="#i-settings"></use></svg></span>
+          <span class="label-text">Settings</span>
+        </button>
+      </div>
+    </main>
+
+    <footer>Made in Jamaica, with curiosity and a little creativity. © <span id="year"></span> Ale</footer>
+  </section>
+
+  <section id="window" class="window" onclick="if(event.target===this)closeApp()">
+    <div class="panel">
+      <div class="bar">
+        <button class="dot red" aria-label="Close window" onclick="closeApp()"></button>
+        <span class="dot yellow"></span>
+        <span class="dot green"></span>
+        <strong id="windowtitle">About Me</strong>
+        <span class="spacer"></span>
+      </div>
+      <div class="content" id="windowcontent"></div>
+    </div>
+  </section>
+
+  <div id="toast"></div>
+
+  <script>
+    const $ = id => document.getElementById(id);
+
+    function tick(){
+      const now = new Date();
+      $('lockdate').textContent = now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+      $('locktime').textContent = now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',hour12:false});
+      $('topclock').textContent = now.toLocaleTimeString('en-US',{weekday:'short',hour:'numeric',minute:'2-digit'});
+      $('year').textContent = now.getFullYear();
+    }
+    tick();
+    setInterval(tick, 15000);
+
+    function unlock(){
+      $('lock').style.opacity = '0';
+      $('lock').style.transform = 'translateY(-60px)';
+      $('desktop').style.display = 'flex';
+      setTimeout(()=> $('lock').style.display = 'none', 550);
+    }
+
+    let startY = 0;
+    $('lock').addEventListener('touchstart', e => startY = e.touches[0].clientY, {passive:true});
+    $('lock').addEventListener('touchend', e => { if(startY - e.changedTouches[0].clientY > 35) unlock(); }, {passive:true});
+
+    const contents = {
+      about:`<div class="label">Hello there</div><h2>I'm Ale 👋</h2><p>I'm a computing student at the University of Technology, Jamaica. This space is my digital home, where I can share what I'm learning, what I'm building, and what catches my interest.</p><div class="tile"><b>📍 Based in Jamaica</b><p>Studying computing at UTech, Jamaica.</p></div><h3>A little about me</h3><p>I'm interested in technology and growing my skills through classes, experiments, and personal projects. More of my story coming soon.</p>`,
+      projects:`<div class="label">My work</div><h2>Projects</h2><p>A place for things I've built, class assignments I'm proud of, and projects in progress.</p><div class="tile"><b>🚀 Project 01</b><p>Your first featured project goes here. Add its title, screenshots, description, and GitHub link.</p></div><div class="tile"><b>💡 Project 02</b><p>Another project to show off what you've learned.</p></div><p class="muted">Demo placeholders. Replace with your real projects.</p>`,
+      skills:`<div class="label">The toolkit</div><h2>Skills & interests</h2><p>Currently studying computing and exploring different areas of technology.</p><h3>Areas to showcase</h3><span class="pill">Programming</span><span class="pill">Web development</span><span class="pill">Problem solving</span><span class="pill">Databases</span><span class="pill">Software design</span><p class="muted">These are suggested portfolio categories, not a verified list of your skills. Edit them as needed.</p>`,
+      notes:`<div class="label">The notebook</div><h2>Leave a note ✍️</h2><p>Have a thought about this site? Write it here. This local demo saves notes only in your browser.</p><textarea id="note" placeholder="Hey Ale, your site looks cool..."></textarea><button class="small-button" onclick="saveNote()">Save note</button><h3>Saved notes</h3><div id="noteslist"></div>`,
+      photos:`<div class="label">The gallery</div><h2>Photos</h2><div class="mock-photo"><svg class="icon"><use href="#i-photo"></use></svg></div><p>Moments, places, and little pieces of life in Jamaica.</p><p class="muted">Add your own photos here to make the gallery yours.</p>`,
+      contact:`<div class="label">Get in touch</div><h2>Say hello.</h2><p>Want to connect about tech, projects, or something interesting? Here's where to find me.</p><div class="tile"><b>📧 Email</b><p>Add your email address to activate a contact link.</p></div><div class="tile"><b>⌘ GitHub</b><p>Add your GitHub profile.</p></div><div class="tile"><b>↗ LinkedIn</b><p>Add your LinkedIn profile.</p></div>`,
+      safari:`<div class="label">My corner of the web</div><h2>Safari 🌐</h2><p>A curated corner for my favourite links, profiles, and resources.</p><div class="tile"><b>University of Technology, Jamaica</b><p>My university.</p><a class="contactlink" href="https://www.utech.edu.jm/" target="_blank" rel="noopener">Visit UTech</a></div>`,
+      settings:`<div class="label">Personalize the space</div><h2>Settings</h2><p>Change the look of this little desktop.</p><h3>Wallpaper</h3><div class="button-row"><button class="small-button" onclick="theme(0)">Berry</button><button class="small-button" onclick="theme(1)">Ocean</button><button class="small-button" onclick="theme(2)">Midnight</button></div><h3>Lock screen</h3><button class="small-button" onclick="closeApp();lockScreen()">Lock screen</button>`
+    };
+
+    const titles = {about:'About Me',projects:'Projects',skills:'Skills',notes:'Notes',photos:'Photos',contact:'Contact',safari:'Safari',settings:'Settings'};
+
+    function openApp(key){
+      $('windowtitle').textContent = titles[key];
+      $('windowcontent').innerHTML = contents[key];
+      $('window').style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+      if(key === 'notes') renderNotes();
+    }
+
+    function closeApp(){
+      $('window').style.display = 'none';
+      if($('desktop').style.display === 'flex') document.body.style.overflow = 'hidden';
+    }
+
+    document.addEventListener('keydown', e => { if(e.key === 'Escape') closeApp(); });
+
+    function saveNote(){
+      const note = $('note').value.trim();
+      if(!note) return;
+      const notes = JSON.parse(localStorage.getItem('ale-notes') || '[]');
+      notes.unshift(note);
+      localStorage.setItem('ale-notes', JSON.stringify(notes));
+      $('note').value = '';
+      renderNotes();
+      toast('Saved in this browser');
+    }
+
+    function renderNotes(){
+      const notes = JSON.parse(localStorage.getItem('ale-notes') || '[]');
+      $('noteslist').innerHTML = notes.length
+        ? notes.map(note => `<div class="tile">${escapeHtml(note)}</div>`).join('')
+        : '<p class="muted">No notes yet.</p>';
+    }
+
+    function escapeHtml(str){
+      return str.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+
+    function toast(t){
+      $('toast').textContent = t;
+      $('toast').style.display = 'block';
+      setTimeout(() => $('toast').style.display = 'none', 2200);
+    }
+
+    function theme(i){
+      $('wall').style.filter = ['none','hue-rotate(85deg)','hue-rotate(175deg) brightness(.55)'][i];
+    }
+
+    function lockScreen(){
+      $('lock').style.display = 'flex';
+      $('lock').style.opacity = '1';
+      $('lock').style.transform = '';
+      $('desktop').style.display = 'none';
+      $('window').style.display = 'none';
+    }
+  </script>
+</body>
+</html>
