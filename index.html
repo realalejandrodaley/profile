@@ -366,6 +366,37 @@
     body.light-mode #lock .unlock-chip{color:#253049}
     body.light-mode footer{color:#253049}
     @media(max-width:360px){.apps{gap:13px 4px}.appicon{width:57px;height:57px}.app{font-size:10px}.clock-wrap{font-size:11px}.intro h1{font-size:40px}}
+
+    /* Themed app windows */
+    .window{background:rgba(3,6,13,.72)}
+    .panel{background:linear-gradient(155deg,#151b2a,#101521 75%,#191827);color:#edf1ff;border:1px solid rgba(177,195,255,.16);box-shadow:0 30px 100px rgba(0,0,0,.65)}
+    .bar{background:rgba(255,255,255,.045);border-bottom:1px solid rgba(192,201,241,.13)}
+    .bar strong{color:#cbd3ec}
+    .content p{color:#b4bdd2}
+    .content h2,.content h3{color:#f3f5ff}
+    .tile{background:rgba(255,255,255,.045);border:1px solid rgba(192,201,241,.12);box-shadow:0 6px 24px rgba(0,0,0,.07)}
+    .tile p{color:#b5bfd5}
+    .pill{background:rgba(126,146,221,.16);border:1px solid rgba(156,171,235,.12);color:#ccd5ff}
+    .muted{color:#8e9ab7!important}
+    .label{color:#a8b7f2}
+    .contactlink,.small-button{background:linear-gradient(135deg,#5465a5,#394572);color:#fff;transition:filter .2s,transform .2s}
+    .contactlink:hover,.small-button:hover{filter:brightness(1.15);transform:translateY(-1px)}
+    .mock-photo{background:linear-gradient(135deg,#18273d,#353052,#74658a)}
+    textarea,input{background:#111827;border:1px solid #394459;color:#edf1ff;outline-offset:2px}
+    textarea::placeholder,input::placeholder{color:#79869f}
+    #toast{border:1px solid rgba(177,195,255,.2);background:#1b2540}
+    body.light-mode .window{background:rgba(30,41,70,.36)}
+    body.light-mode .panel{background:linear-gradient(155deg,#fbfcff,#ecf0fb);color:#27324a;border:1px solid rgba(90,114,165,.24)}
+    body.light-mode .bar{background:rgba(255,255,255,.72);border-bottom:1px solid #dbe1ee}
+    body.light-mode .bar strong{color:#4d5972}
+    body.light-mode .content h2,body.light-mode .content h3{color:#222d44}
+    body.light-mode .content p,body.light-mode .tile p{color:#57647d}
+    body.light-mode .tile{background:rgba(255,255,255,.75);border-color:#dbe2f0}
+    body.light-mode .pill{background:#e2e9fb;color:#4e6197;border-color:#cfdaee}
+    body.light-mode .muted{color:#77849b!important}
+    body.light-mode .label{color:#6176b6}
+    body.light-mode textarea,body.light-mode input{background:#fff;border-color:#cbd5e5;color:#27324a}
+    @media(max-width:640px){.panel{border-bottom:0}.bar::before{background:#64708c}body.light-mode .bar::before{background:#bac5d9}}
   </style>
 </head>
 <body>
@@ -388,7 +419,7 @@
     <div class="lock-sub">Alejandro’s personal space on the internet.</div>
     <div class="unlock-wrap">
       <div class="unlock-chip glass"><span class="chevron">⌃</span> Swipe up or tap to unlock</div>
-      <button class="unlock" onclick="unlock()">Open Ale OS</button>
+      <button class="unlock" onclick="unlock()">Open Alejandro OS</button>
     </div>
   </section>
 
@@ -465,7 +496,7 @@
     function tick(){
       const now = new Date();
       $('lockdate').textContent = now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
-      $('locktime').textContent = now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',hour12:false});
+      $('locktime').textContent = now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',hour12:true});
       $('topclock').textContent = now.toLocaleTimeString('en-US',{weekday:'short',hour:'numeric',minute:'2-digit'});
       $('year').textContent = now.getFullYear();
     }
